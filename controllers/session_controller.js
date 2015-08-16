@@ -19,6 +19,8 @@ exports.new = function(req, res) {
 exports.create = function(req, res) {
   var login    = req.body.login;
   var password = req.body.password;
+	var date = new Date();
+	var time = date.getTime();
 
   var userController = require('./user_controller');
   userController.autenticar(login, password, function(error, user) {
@@ -30,7 +32,8 @@ exports.create = function(req, res) {
 
     // Crear req.session.user y guardar campos id y username
     // La sesión se define por la existencia de: req.session.user
-    req.session.user = {id: user.id, username: user.username};
+		// Auto-logout pasados 2 minutos
+    req.session.user = {id: user.id, username: user.username, timestamp: time};
 
     res.redirect(req.session.redir.toString());  // redirección a path anterior a login
   });

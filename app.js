@@ -40,6 +40,21 @@ app.use(function(req, res, next) {
   next();
 });
 
+// Comprobar si la sesión ha expirado
+// pasados 2 minutos de incatividad
+app.use(function(req, res, next) {
+  if (req.session.hasOwnProperty("user")) {
+    var date = new Date();
+    var ts = date.getTime();
+    var diff = Math.floor((ts - req.session.user.timestamp)/1000);
+
+    if (diff > 120) {
+        delete req.session.user;
+    }
+  }
+  next();
+});
+
 app.use('/', routes);
 
 // catch 404 and forward to error handler
