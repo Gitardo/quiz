@@ -18,7 +18,7 @@ exports.load = function(req, res, next, quizId) {
 };
 
 // GET /quizes?search=texto_a_buscar
-exports.index = function(req, res) {
+exports.index = function(req, res, next) {
   if (req.query.search === undefined) {
     models.Quiz.findAll().then(function(quizes) {
       res.render('quizes/index', {quizes: quizes, errors: []});
@@ -92,7 +92,7 @@ exports.update = function(req, res) {
 };
 
 // DELETE /quizes/:id
-exports.destroy = function(req, res) {
+exports.destroy = function(req, res, next) {
   req.quiz.destroy().then( function() {
     res.redirect('/quizes');
   }).catch(function(error) { next(error) });

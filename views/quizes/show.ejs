@@ -8,11 +8,11 @@
 <p><a href="/quizes/<%= quiz.id %>/comments/new"><button>Nuevo comentario</button></a></p>
 
 <p><strong>Comentarios:</strong></p>
-<%for(index in quiz.comment){%>
-  <% if (quiz.comments[index].published || session.user) { %>
+<%for(index in quiz.Comments){%>
+  <% if (quiz.Comments[index].published || session.user) { %>
     <p>- <%=quiz.comments[index].text%>
-		<% if (session.user && !quiz.comments[index].published) { %>
-		  <a href="/quizes/<%= quiz.id %>/comments/<%= quiz.comments[index].id %>/publish"><button>Publicar</button></a>
+		<% if (session.user && !quiz.Comments[index].published) { %>
+		  <a href="/quizes/<%= quiz.id %>/comments/<%= quiz.Comments[index].id %>/publish"><button>Publicar</button></a>
 		<% } %>
 	</p>
 	<% } %>

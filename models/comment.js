@@ -1,5 +1,5 @@
 // Definición del modelo de Comment con validación
-var Sequelize = require('sequelize');
+//var Sequelize = require('sequelize');
 
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define(

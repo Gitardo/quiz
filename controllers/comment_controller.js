@@ -1,8 +1,9 @@
 var models = require('../models/models.js');
 
 // Autoload :id de comentarios
-exports.load = function(req, res, next) {
-	models.Comment.find(req.params.commentId).then(function(comment) {
+exports.load = function(req, res, next, commentId) {
+  	models.Comment.find({	where: { id: Number(commentId) }})
+		.then(function(comment){
 		if (comment) {
 			req.comment = comment;
 			next();
@@ -14,14 +15,14 @@ exports.load = function(req, res, next) {
 
 // GET /quizes/:quizId/comments/new
 exports.new = function(req, res) {
-  res.render('comments/new.ejs', {quizid: req.params.quizId, errors: []});
+  res.render('comments/new.ejs', {quizId: req.params.quizId, errors: []});
 };
 
 // POST /quizes/:quizId/comments
-exports.create = function(req, res) {
+exports.create = function(req, res, next) {
   var comment = models.Comment.build(
     { text:  req.body.comment.text,
-      quizId: req.params.quizId
+      QuizId: req.params.quizId
     });
 
   comment
@@ -29,7 +30,7 @@ exports.create = function(req, res) {
   .then(
     function(err){
       if(err) {
-        res.render('comments/new.ejs', {comment: comment, quizid: req.params.quizId, errors: err.errors});
+        res.render('comments/new.ejs', {quizid: req.params.quizId, comment: comment, errors: err.errors});
       } else {
         comment  // save: guarda en DB campo de texto de comment
         .save({fields: ["text", "quizId"]})
@@ -45,5 +46,5 @@ exports.publish = function(req, res) {
 
 	req.comment.save({fields: ["published"]})
 		.then(function(){res.redirect('/quizes/' + req.params.quizId);})
-		.catch(function(error){next(error);});
+		.catch(function(error){next(error)});
 };

@@ -12,7 +12,7 @@ exports.new = function(req, res) {
   var errors = req.session.errors || {};
   req.session.errors = {};
 
-  res.render('session/new', {errors: errors});
+  res.render('sessions/new', {errors: errors});
 };
 
 // POST /login -- Crear la sesión
@@ -27,7 +27,7 @@ exports.create = function(req, res) {
     if (error) {
       req.session.errors = [{"message": 'Se ha producido un error: '+error}];
       res.redirect("/login");
-      retirn;
+      return;
     }
 
     // Crear req.session.user y guardar campos id y username
@@ -39,7 +39,7 @@ exports.create = function(req, res) {
   });
 };
 
-// DELETE /logout -- Destruir sesión
+// GET /logout -- Destruir sesión (debería ser DELETE)
 exports.destroy = function(req, res) {
   delete req.session.user;
   res.redirect(req.session.redir.toString());  // redirect a path anterior a login
