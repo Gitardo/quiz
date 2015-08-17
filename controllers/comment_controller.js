@@ -1,8 +1,8 @@
 var models = require('../models/models.js');
 
 // Autoload :id de comentarios
-exports.load = function(req, res, next, commentId) {
-  	models.Comment.find({	where: { id: Number(commentId) }})
+exports.load = function(req, res, next) {
+  	models.Comment.find(req.params.commentId)
 		.then(function(comment){
 		if (comment) {
 			req.comment = comment;
@@ -42,7 +42,7 @@ exports.create = function(req, res, next) {
 
 // GET /quizes/:quizId/comments/:commentId/publish
 exports.publish = function(req, res) {
-	req.comment.published = 1;
+	req.comment.published = true;
 
 	req.comment.save({fields: ["published"]})
 		.then(function(){res.redirect('/quizes/' + req.params.quizId);})

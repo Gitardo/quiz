@@ -8,7 +8,7 @@
 <p><a href="/quizes/<%= quiz.id %>/comments/new"><button>Nuevo comentario</button></a></p>
 
 <p><strong>Comentarios:</strong></p>
-<%for(index in quiz.comments){%>
+<%console.log(quiz);for(index in quiz.comments){%>
   <% if (quiz.comments[index].published || session.user) { %>
     <p>- <%=quiz.comments[index].text%>
 		<% if (session.user && !quiz.comments[index].published) { %>
