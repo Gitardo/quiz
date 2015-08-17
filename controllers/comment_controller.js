@@ -22,7 +22,7 @@ exports.new = function(req, res) {
 exports.create = function(req, res, next) {
   var comment = models.Comment.build(
     { text:  req.body.comment.text,
-      QuizId: req.params.quizId
+      quizId: req.params.quizId
     });
 
   comment
@@ -30,7 +30,7 @@ exports.create = function(req, res, next) {
   .then(
     function(err){
       if(err) {
-        res.render('comments/new.ejs', {quizid: req.params.quizId, comment: comment, errors: err.errors});
+        res.render('comments/new.ejs', {quizId: req.params.quizId, comment: comment, errors: err.errors});
       } else {
         comment  // save: guarda en DB campo de texto de comment
         .save({fields: ["text", "quizId"]})
@@ -42,7 +42,7 @@ exports.create = function(req, res, next) {
 
 // GET /quizes/:quizId/comments/:commentId/publish
 exports.publish = function(req, res) {
-	req.comment.published = true;
+	req.comment.published = 1;
 
 	req.comment.save({fields: ["published"]})
 		.then(function(){res.redirect('/quizes/' + req.params.quizId);})

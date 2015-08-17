@@ -14,7 +14,7 @@ exports.load = function(req, res, next, quizId) {
         next(new Error('No existe quizId=' + quizId));
       }
     }
-  ).catch(function(error) { next(error); });
+  );//.catch(function(error) { next(error); });
 };
 
 // GET /quizes?search=texto_a_buscar
