@@ -19,16 +19,16 @@ exports.load = function(req, res, next, quizId) {
 
 // GET /quizes?search=texto_a_buscar
 exports.index = function(req, res, next) {
-  if (req.query.search === undefined) {
-    models.Quiz.findAll().then(function(quizes) {
-      res.render('quizes/index', {quizes: quizes, errors: []});
-    }).catch(function(error) { next(error); })
-  }
-  else {
-    models.Quiz.findAll({where: ["pregunta like ?", "%" + req.query.search.replace(" ", "%") + "%"]}).then(function(quizes) {
-      res.render('quizes/index', {quizes: quizes, errors: []});
-    }).catch(function(error) { next(error); })
-  }
+  var search = '%';
+
+	if(req.query.search != null) {
+		search = '%' + req.query.search.replace(/\s+/g,"%") + '%';
+	}
+
+  	models.Quiz.findAll({where: ["pregunta like ?", search]}).then(function(quizes){
+		res.render('quizes/index.ejs', {quizes: quizes, errors: []});
+	})
+	.catch(function(error){ next(error); });
 };
 
 // GET /quizes/:id

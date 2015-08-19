@@ -53,5 +53,3 @@ sequelize.sync({force: false}).then(function() {
     };
   });
 });
-
-//Comment.sync({force: true});

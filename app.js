@@ -12,6 +12,13 @@ var routes = require('./routes/index');
 
 var app = express();
 
+// Globals constants
+app.locals.SESSION_TIMEOUT = 120000;
+app.locals.DEFAULT_TIME = 0;
+
+// Global variables
+app.locals.lastHtmlTransactionTime = app.locals.DEFAULT_TIME;
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -43,16 +50,22 @@ app.use(function(req, res, next) {
 // Comprobar si la sesión ha expirado
 // pasados 2 minutos de incatividad
 app.use(function(req, res, next) {
-  if (req.session.hasOwnProperty("user")) {
-    var date = new Date();
-    var ts = date.getTime();
-    var diff = Math.floor((ts - req.session.user.timestamp)/1000);
+	// Primeramente guardamos el long con la fecha y hora actuales
+	var localTime = (new Date()).getTime();
 
-    if (diff > 120) {
-        delete req.session.user;
-    }
-  }
-  next();
+	// Seguidamente comparamos la hora local con la hora préviamente guardada (solo si esta se ha guardado)
+	// para comprovar si han vencido los 2 min, y si es así, llamaremos al logout
+	if(app.locals.lastHtmlTransactionTime && Math.abs(localTime - app.locals.lastHtmlTransactionTime) >= app.locals.SESSION_TIMEOUT){
+		delete req.session.user;
+		app.locals.lastHtmlTransactionTime = app.locals.DEFAULT_TIME;
+	}
+
+	// Actualizamos la fecha de ultima transaction solo si el usuario está logueado
+	if(req.session.user){
+		app.locals.lastHtmlTransactionTime = (new Date()).getTime();
+	}
+
+	next();
 });
 
 app.use('/', routes);
