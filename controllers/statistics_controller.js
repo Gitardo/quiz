@@ -15,10 +15,10 @@ exports.show = function(req, res, next) {
 			}
 			for (var j=0; j < quizes.length; j++) {
 				if (c_qid.indexOf(quizes[j].id) >= 0) {
-					q_with++;
+					q_without++;
 				}
 				else {
-					q_without++;
+					q_with++;
 				}
 			}
 	  		avg = (nc / quizes.length);
